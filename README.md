@@ -1,16 +1,11 @@
-# pagina_web
 
-A new Flutter project.
+# Escuela Virtual de Modelaje (Frontend Flutter)
+Frontend completo en Flutter (Web + Android/iOS opcional).
 
-## Getting Started
+## Web
+flutter pub get
+flutter run -d chrome --dart-define=BASE_URL=https://api.tu-dominio.com
 
-This project is a starting point for a Flutter application.
-
-A few resources to get you started if this is your first Flutter project:
-
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
-
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+## Android/iOS
+flutter create .
+flutter run -d android  # o -d ios
