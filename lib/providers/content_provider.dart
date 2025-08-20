@@ -1,37 +1,25 @@
-import 'package:flutter/foundation.dart';
-import '../models/app_category.dart' as app_models;
+import 'package:flutter/material.dart';
+import '../models/app_category.dart';
 import '../models/video_item.dart';
 import '../services/content_service.dart';
 
-class ContentProvider with ChangeNotifier {
+class ContentProvider extends ChangeNotifier {
   final _service = ContentService();
-  List<app_models.AppCategory> categories = [];
+  List<AppCategory> categories = [];
   List<VideoItem> videos = [];
-  int? selectedCategoryId;
+  String? selectedCategoryId;
+  bool loading = true;
 
-  bool loading = false;
-
-  Future<void> load() async {
-    loading = true;
-    notifyListeners();
-    try {
-      categories = await _service.fetchCategories();
-      videos = await _service.fetchVideos();
-    } finally {
-      loading = false;
-      notifyListeners();
-    }
+  Future<void> loadInitial() async {
+    loading = true; notifyListeners();
+    categories = await _service.fetchCategories();
+    await selectCategory(null);
+    loading = false; notifyListeners();
   }
 
-  Future<void> filterByCategory(int? id) async {
+  Future<void> selectCategory(String? id) async {
     selectedCategoryId = id;
-    loading = true;
+    videos = await _service.fetchVideos(categoryId: id);
     notifyListeners();
-    try {
-      videos = await _service.fetchVideos(categoryId: id);
-    } finally {
-      loading = false;
-      notifyListeners();
-    }
   }
 }

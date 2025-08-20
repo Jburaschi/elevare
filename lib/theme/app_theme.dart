@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
 
-final ThemeData appDarkTheme = ThemeData(
-  brightness: Brightness.dark,
-  colorScheme: ColorScheme.fromSeed(seedColor: const Color(0xFF6E56CF), brightness: Brightness.dark),
-  scaffoldBackgroundColor: const Color(0xFF0F0F10),
-  useMaterial3: true,
-  appBarTheme: const AppBarTheme(
-    backgroundColor: Colors.transparent,
-    elevation: 0,
-  ),
-  inputDecorationTheme: const InputDecorationTheme(
-    border: OutlineInputBorder(),
-  ),
-);
+class AppTheme {
+  static ThemeData get light => ThemeData(
+    colorSchemeSeed: const Color(0xFF2E2B62),
+    brightness: Brightness.light,
+    useMaterial3: true,
+    textTheme: GoogleFonts.poppinsTextTheme(),
+    cardTheme: const CardThemeData(
+      margin: EdgeInsets.zero,
+      elevation: 0,
+      clipBehavior: Clip.antiAlias,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.all(Radius.circular(16))),
+    ),
+  );
+}

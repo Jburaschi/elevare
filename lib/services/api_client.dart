@@ -1,63 +1,31 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-import '../config.dart';
+
+const String baseUrl = String.fromEnvironment('BASE_URL', defaultValue: '');
 
 class ApiClient {
-  final _base = AppConfig.baseUrl;
+  final _client = http.Client();
 
-  Future<Map<String, dynamic>> post(String path, Map<String, dynamic> body, {String? token}) async {
-    final uri = Uri.parse('$_base$path');
-    final res = await http.post(uri, body: jsonEncode(body), headers: {
-      'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    });
-    if (res.statusCode >= 200 && res.statusCode < 300 && res.body.isNotEmpty) {
-      return jsonDecode(res.body) as Map<String, dynamic>;
-    } else if (res.statusCode >= 200 && res.statusCode < 300) {
-      return {};
-    } else {
-      throw Exception('Error ${res.statusCode}: ${res.body}');
-    }
+  Uri _u(String path, [Map<String, dynamic>? q]) {
+    final url = baseUrl.isNotEmpty ? baseUrl : 'http://localhost:3000';
+    return Uri.parse('$url$path').replace(queryParameters: q?.map((k, v) => MapEntry(k, '$v')));
   }
 
-  Future<Map<String, dynamic>> get(String path, {String? token}) async {
-    final uri = Uri.parse('$_base$path');
-    final res = await http.get(uri, headers: {
-      'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    });
-    if (res.statusCode >= 200 && res.statusCode < 300 && res.body.isNotEmpty) {
-      return jsonDecode(res.body) as Map<String, dynamic>;
-    } else if (res.statusCode >= 200 && res.statusCode < 300) {
-      return {};
-    } else {
-      throw Exception('Error ${res.statusCode}: ${res.body}');
+  Future<Map<String, dynamic>> getJson(String path, {Map<String, dynamic>? query}) async {
+    final r = await _client.get(_u(path, query), headers: {'Content-Type': 'application/json'});
+    if (r.statusCode >= 200 && r.statusCode < 300) {
+      return jsonDecode(r.body) as Map<String, dynamic>;
     }
+    throw Exception('GET $path -> ${r.statusCode}');
   }
 
-  Future<Map<String, dynamic>> put(String path, Map<String, dynamic> body, {String? token}) async {
-    final uri = Uri.parse('$_base$path');
-    final res = await http.put(uri, body: jsonEncode(body), headers: {
-      'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    });
-    if (res.statusCode >= 200 && res.statusCode < 300 && res.body.isNotEmpty) {
-      return jsonDecode(res.body) as Map<String, dynamic>;
-    } else if (res.statusCode >= 200 && res.statusCode < 300) {
-      return {};
-    } else {
-      throw Exception('Error ${res.statusCode}: ${res.body}');
+  Future<Map<String, dynamic>> postJson(String path, Map<String, dynamic> body) async {
+    final r = await _client.post(_u(path),
+        headers: {'Content-Type': 'application/json'},
+        body: jsonEncode(body));
+    if (r.statusCode >= 200 && r.statusCode < 300) {
+      return jsonDecode(r.body) as Map<String, dynamic>;
     }
-  }
-
-  Future<void> delete(String path, {String? token}) async {
-    final uri = Uri.parse('$_base$path');
-    final res = await http.delete(uri, headers: {
-      'Content-Type': 'application/json',
-      if (token != null) 'Authorization': 'Bearer $token',
-    });
-    if (res.statusCode < 200 || res.statusCode >= 300) {
-      throw Exception('Error ${res.statusCode}: ${res.body}');
-    }
+    throw Exception('POST $path -> ${r.statusCode}');
   }
 }

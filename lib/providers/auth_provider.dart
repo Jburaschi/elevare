@@ -1,33 +1,34 @@
-import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import '../models/user.dart';
 import '../services/auth_service.dart';
 
-class AuthProvider with ChangeNotifier {
-  final AuthService _auth = AuthService();
-  User? _user;
-  String? _token;
+class AuthProvider extends ChangeNotifier {
+  final _service = AuthService();
+  AppUser? _user;
 
-  User? get user => _user;
-  bool get isLoggedIn => _user != null;
-  bool get isAdmin => _user?.role == 'admin';
-  bool get hasPaid => _user?.estadoPago == true;
+  AppUser? get user => _user;
+  bool get loggedIn => _user != null;
+  bool get paid => _user?.estadoPago == true;
 
-  Future<void> login(String email, String password) async {
-    _user = await _auth.login(email, password);
-    _token = await _auth.getToken();
+  Future<void> login(String email, String pass) async {
+    _user = await _service.login(email, pass);
     notifyListeners();
   }
 
-  Future<void> register(String nombre, String email, String password) async {
-    _user = await _auth.register(nombre, email, password);
-    _token = await _auth.getToken();
+  Future<void> register(String email, String pass) async {
+    _user = await _service.register(email, pass);
     notifyListeners();
   }
 
-  Future<void> logout() async {
-    await _auth.logout();
+  void logout() {
     _user = null;
-    _token = null;
     notifyListeners();
+  }
+
+  void markPaid() {
+    if (_user != null) {
+      _user = AppUser(id: _user!.id, email: _user!.email, estadoPago: true);
+      notifyListeners();
+    }
   }
 }

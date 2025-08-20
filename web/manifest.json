@@ -1,0 +1,11 @@
+{
+  "name": "Elevare",
+  "short_name": "Elevare",
+  "start_url": ".",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#000000",
+  "description": "Escuela Virtual de Modelaje",
+  "orientation": "portrait-primary",
+  "prefer_related_applications": false
+}

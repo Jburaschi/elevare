@@ -1,24 +1,31 @@
 <!DOCTYPE html>
 <html>
-<head>
-  <base href="/" />
-  <meta charset="UTF-8">
-  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
-  <meta name="description" content="Escuela Virtual de Modelaje - Web App">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Escuela Virtual de Modelaje</title>
-  <link rel="manifest" href="manifest.json">
-</head>
-<body>
-  <script src="flutter.js" defer></script>
-  <script>
-    window.addEventListener('load', function(ev) {
-      _flutter.loader.loadEntrypoint({}).then(function(engineInitializer) {
-        return engineInitializer.initializeEngine();
-      }).then(function(appRunner) {
-        return appRunner.runApp();
+  <head>
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="Escuela Virtual de Modelaje - Elevare">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elevare</title>
+    <link rel="manifest" href="manifest.json">
+    <meta name="theme-color" content="#000000">
+    <script>
+      const serviceWorkerVersion = null;
+    </script>
+    <script defer src="flutter.js"></script>
+  </head>
+  <body>
+    <div id="loading" style="display:flex;align-items:center;justify-content:center;height:100vh;font-family:Arial,sans-serif;">
+      Cargando Elevare...
+    </div>
+    <script>
+      window.addEventListener('load', function(ev) {
+        _flutter.loader.loadEntrypoint().then(function(engineInitializer) {
+          return engineInitializer.initializeEngine();
+        }).then(function(appRunner) {
+          document.getElementById('loading')?.remove();
+          return appRunner.runApp();
+        });
       });
-    });
-  </script>
-</body>
+    </script>
+  </body>
 </html>

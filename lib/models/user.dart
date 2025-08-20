@@ -1,17 +1,12 @@
-class User {
-  final int id;
-  final String nombre;
+class AppUser {
+  final String id;
   final String email;
-  final String role; // 'user' | 'admin'
   final bool estadoPago;
+  AppUser({required this.id, required this.email, required this.estadoPago});
 
-  User({required this.id, required this.nombre, required this.email, required this.role, required this.estadoPago});
-
-  factory User.fromJson(Map<String, dynamic> json) => User(
-        id: json['id'] is int ? json['id'] : int.tryParse('${json['id']}') ?? 0,
-        nombre: json['nombre'] ?? '',
-        email: json['email'] ?? '',
-        role: (json['role'] ?? 'user').toString(),
-        estadoPago: json['estadoPago'] == true || json['estadoPago'] == 1 || '${json['estadoPago']}' == 'true',
-      );
+  factory AppUser.fromJson(Map<String, dynamic> j) => AppUser(
+    id: '${j["id"]}',
+    email: j["email"] ?? '',
+    estadoPago: (j["estadoPago"] ?? j["paid"] ?? false) == true,
+  );
 }
